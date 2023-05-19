@@ -1,9 +1,10 @@
 import "./GameOverScreen.css";
 
-const GameOverScreen = () => {
+const GameOverScreen = ({retry}) => {
     return (
         <div className="end">
             <h1>Find Word</h1>
+            <button onClick={retry}>Retry</button>
         </div>
     );
 }
