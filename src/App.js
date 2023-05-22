@@ -8,16 +8,40 @@ import GameScreen from './components/GameScreen';
 import GameOverScreen from './components/GameOverScreen';
 
 const stages = [
-    {id: 1, name: "start"},
-    {id: 2, name: "game"},
-    {id: 3, name: "end"}
+    { id: 1, name: "start" },
+    { id: 2, name: "game" },
+    { id: 3, name: "end" }
 ];
 
 function App() {
     const [gameStage, setGameStage] = useState(stages[0].name);
+
     const [words] = useState(wordsList);
 
+    const [chosenWord, setChosenWord] = useState();
+    const [chosenCategory, setChosenCategory] = useState();
+    const [chosenLetters, setChosenLetters] = useState();
+
+    const chooseWordAndCategory = () => {
+        const categories = Object.keys(words);
+        const category = categories[Math.floor(Math.random() * Object.keys(categories).length)];
+
+        const word = words[category][Math.floor(Math.random() * Object.keys(words[category]).length)];
+
+        return { category, word };
+    }
+
     const startGame = () => {
+        const { category, word } = chooseWordAndCategory();
+
+        let letters = word.split("").map(
+            (letter) => letter.toLowerCase()
+        );
+
+        setChosenCategory(category);
+        setChosenWord(word);
+        setChosenLetters(letters);
+
         setGameStage(stages[1].name);
     }
 

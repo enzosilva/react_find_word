@@ -1,6 +1,6 @@
 import "./GameOverScreen.css";
 
-const GameOverScreen = ({retry}) => {
+const GameOverScreen = ({ retry }) => {
     return (
         <div className="end">
             <h1>Find Word</h1>

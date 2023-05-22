@@ -1,6 +1,6 @@
 import "./GameScreen.css";
 
-const GameScreen = ({letterValidation}) => {
+const GameScreen = ({ letterValidation }) => {
     return (
         <div className="game">
             <h1>Find Word</h1>
