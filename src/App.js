@@ -49,8 +49,10 @@ function App() {
         setGameStage(stages[1].name);
     }
 
-    const letterValidation = () => {
-        setGameStage(stages[2].name);
+    const letterValidation = (letter) => {
+        console.log(letter);
+
+        // setGameStage(stages[2].name);
     }
 
     const retry = () => {
@@ -66,7 +68,9 @@ function App() {
                 chosenWord={chosenWord}
                 chosenLetters={chosenLetters}
                 guessedLetters={guessedLetters}
-                wrongLetters={wrongLetters} />}
+                wrongLetters={wrongLetters}
+                attempts={attempts}
+                score={score} />}
             {(gameStage) === "end" && <GameOverScreen retry={retry} />}
         </div>
     );
