@@ -50,9 +50,26 @@ function App() {
     }
 
     const letterValidation = (letter) => {
-        console.log(letter);
+        let normalizeLetter = letter.toLowerCase();
 
-        // setGameStage(stages[2].name);
+        if (
+            guessedLetters.includes(normalizeLetter) ||
+            wrongLetters.includes(normalizeLetter)
+        ) {
+            return;
+        }
+
+        if (chosenLetters.includes(normalizeLetter)) {
+            setGuessedLetters((actualGuessedLetters) => [
+                ...actualGuessedLetters,
+                normalizeLetter
+            ]);
+        } else {
+            setWrongLetters((actualWrongLetters) => [
+                ...actualWrongLetters,
+                normalizeLetter
+            ]);
+        }
     }
 
     const retry = () => {
