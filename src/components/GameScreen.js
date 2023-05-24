@@ -5,7 +5,7 @@ const GameScreen = ({
     letterValidation,
     chosenWord,
     chosenCategory,
-    chosenLetters,
+    wordLetters,
     guessedLetters,
     wrongLetters,
     attempts,
@@ -34,7 +34,7 @@ const GameScreen = ({
             </h2>
             <p>You still have {attempts} try(ies) left</p>
             <div className="wordContainer">
-                {chosenLetters.map((letter, i) => (
+                {wordLetters.map((letter, i) => (
                     (guessedLetters.includes(letter)) ?
                         (<span key={i} className="letter">{letter}</span>) :
                         (<span key={i} className="blankSquare"></span>)
