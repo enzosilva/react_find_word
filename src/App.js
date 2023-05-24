@@ -1,6 +1,6 @@
 import './App.css';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { wordsList } from './data/words.js';
 
 import StartScreen from './components/StartScreen';
@@ -13,6 +13,8 @@ const stages = [
     { id: 3, name: "end" }
 ];
 
+const attemptsQuantity = 3;
+
 function App() {
     const [words] = useState(wordsList);
     const [gameStage, setGameStage] = useState(stages[0].name);
@@ -23,7 +25,7 @@ function App() {
     const [guessedLetters, setGuessedLetters] = useState([]);
     const [wrongLetters, setWrongLetters] = useState([]);
 
-    const [attempts, setAttempts] = useState(3);
+    const [attempts, setAttempts] = useState(attemptsQuantity);
     const [score, setScore] = useState(0);
 
     const chooseWordAndCategory = () => {
@@ -60,19 +62,33 @@ function App() {
         }
 
         if (chosenLetters.includes(normalizeLetter)) {
-            setGuessedLetters((actualGuessedLetters) => [
-                ...actualGuessedLetters,
+            setGuessedLetters((currentGuessedLetters) => [
+                ...currentGuessedLetters,
                 normalizeLetter
             ]);
         } else {
-            setWrongLetters((actualWrongLetters) => [
-                ...actualWrongLetters,
+            setWrongLetters((currentWrongLetters) => [
+                ...currentWrongLetters,
                 normalizeLetter
             ]);
+
+            setAttempts((currentAttempts) => (currentAttempts - 1));
         }
     }
 
+    useEffect(() => {
+        if (attempts <= 0) {
+            setGuessedLetters([]);
+            setWrongLetters([]);
+
+            setGameStage(stages[2].name);
+        }
+    });
+
     const retry = () => {
+        setScore(0);
+        setAttempts(attemptsQuantity);
+
         setGameStage(stages[0].name);
     }
 
@@ -88,7 +104,7 @@ function App() {
                 wrongLetters={wrongLetters}
                 attempts={attempts}
                 score={score} />}
-            {(gameStage) === "end" && <GameOverScreen retry={retry} />}
+            {(gameStage) === "end" && <GameOverScreen retry={retry} score={score} />}
         </div>
     );
 }
