@@ -1,6 +1,6 @@
 import './App.css';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { wordsList } from './data/words.js';
 
 import StartScreen from './components/StartScreen';
@@ -28,17 +28,19 @@ function App() {
     const [attempts, setAttempts] = useState(attemptsQuantity);
     const [score, setScore] = useState(0);
 
-    const chooseWordAndCategory = () => {
+    const chooseCategoryAndWord = useCallback(() => {
         const categories = Object.keys(words);
         const category = categories[Math.floor(Math.random() * Object.keys(categories).length)];
 
         const word = words[category][Math.floor(Math.random() * Object.keys(words[category]).length)];
 
         return { category, word };
-    }
+    }, [words]);
 
-    const startGame = () => {
-        const { category, word } = chooseWordAndCategory();
+    const startGame = useCallback(() => {
+        resetGame();
+
+        const { category, word } = chooseCategoryAndWord();
 
         let letters = word.split("").map(
             (letter) => letter.toLowerCase()
@@ -49,7 +51,7 @@ function App() {
         setChosenLetters(letters);
 
         setGameStage(stages[1].name);
-    }
+    }, [chooseCategoryAndWord]);
 
     const letterValidation = (letter) => {
         let normalizeLetter = letter.toLowerCase();
@@ -76,14 +78,28 @@ function App() {
         }
     }
 
+    const resetGame = () => {
+        setGuessedLetters([]);
+        setWrongLetters([]);
+    }
+
     useEffect(() => {
         if (attempts <= 0) {
-            setGuessedLetters([]);
-            setWrongLetters([]);
+            resetGame();
 
             setGameStage(stages[2].name);
         }
-    });
+    }, [attempts]);
+
+    useEffect(() => {
+        const uniqueLetters = [...new Set(chosenLetters)];
+
+        if (guessedLetters.length === uniqueLetters.length) {
+            setScore((currentScore) => (currentScore + 100));
+
+            startGame();
+        }
+    }, [guessedLetters, chosenLetters, startGame]);
 
     const retry = () => {
         setScore(0);
